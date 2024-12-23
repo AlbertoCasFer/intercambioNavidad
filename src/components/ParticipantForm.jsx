@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import styles from './ParticipantForm.module.css';
 
 const ParticipantForm = () => {
 	const [participants, setParticipants] = useState([]);
@@ -80,8 +81,17 @@ const ParticipantForm = () => {
 	};
 
 	return (
-		<div>
-			<h1>Participa en el Intercambio Secreto</h1>
+		<div className={styles.container}>
+			<h1 className={styles.title}>Feliz Navidad 2024</h1>
+			<div className={styles.lights}>
+				<div className={styles.light}></div>
+				<div className={styles.light}></div>
+				<div className={styles.light}></div>
+				<div className={styles.light}></div>
+				<div className={styles.light}></div>
+				<div className={styles.light}></div>
+				<div className={styles.light}></div>
+			</div>
 			<form onSubmit={handleSubmit}>
 				<select
 					value={selectedName}
@@ -96,7 +106,7 @@ const ParticipantForm = () => {
 				</select>
 				<button type="submit">Enviar</button>
 			</form>
-			{message && <p>{message}</p>}
+			{message && <p className={styles.message}>{message}</p>}
 		</div>
 	);
 };
