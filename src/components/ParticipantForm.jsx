@@ -7,6 +7,12 @@ const ParticipantForm = () => {
 	const [participants, setParticipants] = useState([]);
 	const [selectedName, setSelectedName] = useState('');
 	const [message, setMessage] = useState('');
+	const images = [
+		'/img/9E863AD0-B62E-4F09-B50B-85D025A933B2_1_105_c.jpeg',
+		'/img/643CB88F-7560-403A-BD24-65D1D2757F07_1_105_c.jpeg',
+		'/img/33199863-3214-449E-A2EE-CEC8F7202ACB_1_105_c.jpeg',
+		'/img/08DB1A60-B267-4166-997F-C902A97949EA_1_105_c.jpeg', // Nueva imagen añadida
+	];
 
 	useEffect(() => {
 		const fetchParticipants = async () => {
@@ -80,18 +86,33 @@ const ParticipantForm = () => {
 		setSelectedName(''); // Limpia la selección
 	};
 
+	// Genera brillitos
+	const generateSparkles = () => {
+		const sparkles = [];
+		for (let i = 0; i < 50; i++) {
+			const x = Math.random() * 100; // Posición horizontal aleatoria
+			const y = Math.random() * 100; // Posición vertical aleatoria
+			const delay = Math.random() * 3; // Retraso aleatorio en la animación
+			sparkles.push(
+				<div
+					key={i}
+					className={styles.sparkle}
+					style={{
+						top: `${y}%`,
+						left: `${x}%`,
+						animationDelay: `${delay}s`,
+					}}
+				/>,
+			);
+		}
+		return sparkles;
+	};
+
 	return (
 		<div className={styles.container}>
+			{generateSparkles()} {/* Agrega los brillitos */}
 			<h1 className={styles.title}>Feliz Navidad 2024</h1>
-			<div className={styles.lights}>
-				<div className={styles.light}></div>
-				<div className={styles.light}></div>
-				<div className={styles.light}></div>
-				<div className={styles.light}></div>
-				<div className={styles.light}></div>
-				<div className={styles.light}></div>
-				<div className={styles.light}></div>
-			</div>
+			{/* Formulario del intercambio */}
 			<form onSubmit={handleSubmit}>
 				<select
 					value={selectedName}
@@ -107,6 +128,19 @@ const ParticipantForm = () => {
 				<button type="submit">Enviar</button>
 			</form>
 			{message && <p className={styles.message}>{message}</p>}
+			{/* Sección de regalos */}
+			<div className={styles.giftContainer}>
+				{images.map((image, index) => (
+					<div className={styles.giftBox} key={index}>
+						<div className={styles.ribbon}></div>
+						<img
+							src={image}
+							alt={`Regalo ${index + 1}`}
+							className={styles.giftImage}
+						/>
+					</div>
+				))}
+			</div>
 		</div>
 	);
 };
