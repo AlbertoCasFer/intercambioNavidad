@@ -1,12 +1,17 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ParticipantForm from './components/ParticipantForm';
+import AdminPanel from './components/AdminPanel';
 
-const App = () => {
+function App() {
 	return (
-		<div>
-			<ParticipantForm />
-		</div>
+		<Router>
+			<Routes>
+				<Route path="/" element={<ParticipantForm />} />
+				<Route path="/admin" element={<AdminPanel />} />
+			</Routes>
+		</Router>
 	);
-};
+}
 
 export default App;
