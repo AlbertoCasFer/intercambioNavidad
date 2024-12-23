@@ -88,67 +88,58 @@ button:hover {
 
 /* Regalos */
 .giftContainer {
-	display: flex;
-	justify-content: center;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr); /* 4 columnas en pantallas grandes */
 	gap: 20px;
 	margin-top: 30px;
+	width: 90%; /* Asegura que se mantenga dentro de la pantalla */
+	justify-content: center;
 }
 
 .giftBox {
 	position: relative;
-	width: 150px;
-	height: 200px;
-	background-color: white;
-	border: 5px solid #ff0000; /* Borde rojo más grueso */
-	border-radius: 20px; /* Bordes redondeados */
-	box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 0 15px rgba(255, 0, 0, 0.6); /* Sombra roja */
+	width: 100%; /* Se ajusta automáticamente al tamaño de la celda */
+	background-color: #006400; /* Fondo verde estilo árbol */
+	border: 2px solid #8b0000;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
-	transition: transform 0.3s, box-shadow 0.3s; /* Suave transición en hover */
 }
 
-.giftBox:hover {
-	transform: scale(1.1); /* Efecto de agrandamiento */
-	box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 0, 0, 0.8); /* Sombra más intensa al pasar el cursor */
-}
-
-/* Cinta roja en la parte superior */
 .ribbon {
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 25px;
-	background-color: #ff0000; /* Cinta roja */
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.ribbon:before,
-.ribbon:after {
-	content: '';
-	position: absolute;
-	width: 10px;
-	height: 25px;
+	height: 20px;
 	background-color: #ff0000;
-	top: 0;
 }
 
-.ribbon:before {
-	left: -10px;
-	clip-path: polygon(100% 0, 0 50%, 100% 100%);
-}
-
-.ribbon:after {
-	right: -10px;
-	clip-path: polygon(0 0, 100% 50%, 0 100%);
-}
-
-/* Imagen del regalo */
+/* Ajuste para que las imágenes se vean completas */
 .giftImage {
 	width: 100%;
-	height: calc(100% - 25px); /* Ajusta la imagen para la cinta */
-	object-fit: cover;
-	border-bottom-left-radius: 20px; /* Bordes redondeados */
-	border-bottom-right-radius: 20px; /* Bordes redondeados */
+	height: 100%;
+	object-fit: contain; /* Las imágenes siempre se verán completas */
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	background-color: #006400; /* Fondo verde detrás de las imágenes */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+	.giftContainer {
+		grid-template-columns: repeat(
+			2,
+			1fr
+		); /* 2 columnas en pantallas medianas */
+	}
+}
+
+@media (max-width: 480px) {
+	.giftContainer {
+		grid-template-columns: 1fr; /* Una sola columna en pantallas pequeñas */
+	}
+	.giftBox {
+		height: 250px; /* Ajusta el alto de las cajas en móvil */
+	}
 }
