@@ -11,7 +11,7 @@ const ParticipantForm = () => {
 		'/img/9E863AD0-B62E-4F09-B50B-85D025A933B2_1_105_c.jpeg',
 		'/img/643CB88F-7560-403A-BD24-65D1D2757F07_1_105_c.jpeg',
 		'/img/33199863-3214-449E-A2EE-CEC8F7202ACB_1_105_c.jpeg',
-		'/img/08DB1A60-B267-4166-997F-C902A97949EA_1_105_c.jpeg', // Nueva imagen añadida
+		'/img/08DB1A60-B267-4166-997F-C902A97949EA_1_105_c.jpeg',
 	];
 
 	useEffect(() => {
@@ -50,6 +50,7 @@ const ParticipantForm = () => {
 				const data = docSnap.data();
 				const { participants = [], assigned = {} } = data;
 
+				// Verifica si ya está asignado
 				if (selectedName in assigned) {
 					setMessage(
 						`Ya participaste. A ti te toca ${assigned[selectedName]}.`,
@@ -57,24 +58,22 @@ const ParticipantForm = () => {
 					return;
 				}
 
-				const available = participants.filter(
-					(participant) =>
-						participant !== selectedName &&
-						!Object.values(assigned).includes(participant),
-				);
+				// Generar asignaciones únicas si no existen
+				if (Object.keys(assigned).length === 0) {
+					const shuffled = [...participants].sort(() => Math.random() - 0.5);
+					const newAssignments = {};
 
-				if (available.length === 0) {
-					setMessage('No hay personas disponibles para asignarte.');
-					return;
+					for (let i = 0; i < shuffled.length; i++) {
+						const giver = shuffled[i];
+						const receiver = shuffled[(i + 1) % shuffled.length];
+						newAssignments[giver] = receiver;
+					}
+
+					await updateDoc(docRef, { assigned: newAssignments });
+					Object.assign(assigned, newAssignments); // Actualizar localmente
 				}
 
-				const randomIndex = Math.floor(Math.random() * available.length);
-				const assignedName = available[randomIndex];
-
-				assigned[selectedName] = assignedName;
-				await updateDoc(docRef, { assigned });
-
-				setMessage(`A ti te toca: ${assignedName}`);
+				setMessage(`A ti te toca: ${assigned[selectedName]}`);
 			} else {
 				setMessage('Error: No se encontró el documento del intercambio.');
 			}
@@ -86,32 +85,10 @@ const ParticipantForm = () => {
 		setSelectedName(''); // Limpia la selección
 	};
 
-	// Genera brillitos
-	const generateSparkles = () => {
-		const sparkles = [];
-		for (let i = 0; i < 50; i++) {
-			const x = Math.random() * 100; // Posición horizontal aleatoria
-			const y = Math.random() * 100; // Posición vertical aleatoria
-			const delay = Math.random() * 3; // Retraso aleatorio en la animación
-			sparkles.push(
-				<div
-					key={i}
-					className={styles.sparkle}
-					style={{
-						top: `${y}%`,
-						left: `${x}%`,
-						animationDelay: `${delay}s`,
-					}}
-				/>,
-			);
-		}
-		return sparkles;
-	};
-
 	return (
 		<div className={styles.container}>
-			{generateSparkles()} {/* Agrega los brillitos */}
 			<h1 className={styles.title}>Feliz Navidad 2024</h1>
+
 			{/* Formulario del intercambio */}
 			<form onSubmit={handleSubmit}>
 				<select
@@ -128,6 +105,7 @@ const ParticipantForm = () => {
 				<button type="submit">Enviar</button>
 			</form>
 			{message && <p className={styles.message}>{message}</p>}
+
 			{/* Sección de regalos */}
 			<div className={styles.giftContainer}>
 				{images.map((image, index) => (
